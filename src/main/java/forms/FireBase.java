@@ -5,15 +5,20 @@
  */
 package forms;
 
+import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -48,12 +53,21 @@ FileInputStream serviceAccount =
         }
 
     }
+   
     public void insertData(String tablename,Map<String,String> data)
     {
         
-        db.collection(tablename).add(data);
+        try {
+            ApiFuture<DocumentReference> future=  db.collection(tablename).add(data);
+            System.out.println("Update time : " + future.get().getId());
+        } catch (InterruptedException ex) {
+            Logger.getLogger(FireBase.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExecutionException ex) {
+            Logger.getLogger(FireBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
                
     }
+    
    
     
 }

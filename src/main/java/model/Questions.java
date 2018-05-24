@@ -13,22 +13,25 @@ package model;
 public class Questions {
     private String id;
     private String q;
-    private String q1;
-    private String q2;
-    private String q3;
-    private String q4;
+    private String o1;
+    private String o2;
+    private String o3;
+    private String o4;
+    private String title;
     private String ans;
+  
 
     public Questions() {
     }
 
-    public Questions(String id, String q, String q1, String q2, String q3, String q4, String ans) {
+    public Questions(String id, String q, String o1, String o2, String o3, String o4, String title, String ans) {
         this.id = id;
         this.q = q;
-        this.q1 = q1;
-        this.q2 = q2;
-        this.q3 = q3;
-        this.q4 = q4;
+        this.o1 = o1;
+        this.o2 = o2;
+        this.o3 = o3;
+        this.o4 = o4;
+        this.title = title;
         this.ans = ans;
     }
 
@@ -48,36 +51,44 @@ public class Questions {
         this.q = q;
     }
 
-    public String getQ1() {
-        return q1;
+    public String getO1() {
+        return o1;
     }
 
-    public void setQ1(String q1) {
-        this.q1 = q1;
+    public void setO1(String o1) {
+        this.o1 = o1;
     }
 
-    public String getQ2() {
-        return q2;
+    public String getO2() {
+        return o2;
     }
 
-    public void setQ2(String q2) {
-        this.q2 = q2;
+    public void setO2(String o2) {
+        this.o2 = o2;
     }
 
-    public String getQ3() {
-        return q3;
+    public String getO3() {
+        return o3;
     }
 
-    public void setQ3(String q3) {
-        this.q3 = q3;
+    public void setO3(String o3) {
+        this.o3 = o3;
     }
 
-    public String getQ4() {
-        return q4;
+    public String getO4() {
+        return o4;
     }
 
-    public void setQ4(String q4) {
-        this.q4 = q4;
+    public void setO4(String o4) {
+        this.o4 = o4;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getAns() {
@@ -90,8 +101,8 @@ public class Questions {
 
     @Override
     public String toString() {
-        return "Questions{" + "id=" + id + ", q=" + q + ", q1=" + q1 + ", q2=" + q2 + ", q3=" + q3 + ", q4=" + q4 + ", ans=" + ans + '}';
+        return "Questions{" + "id=" + id + ", q=" + q + ", o1=" + o1 + ", o2=" + o2 + ", o3=" + o3 + ", o4=" + o4 + ", title=" + title + ", ans=" + ans + '}';
     }
-    
+
     
 }

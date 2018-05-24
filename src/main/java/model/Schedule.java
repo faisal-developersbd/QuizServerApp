@@ -15,16 +15,19 @@ public class Schedule {
     private String start_time;
      private String end_time;
       private String date;
-
+  private String max_life;
+    private String amount;
     public Schedule() {
     }
 
-    public Schedule(String id, String title, String start_time, String end_time, String date) {
+    public Schedule(String id, String title, String start_time, String end_time, String date, String max_life, String amount) {
         this.id = id;
         this.title = title;
         this.start_time = start_time;
         this.end_time = end_time;
         this.date = date;
+        this.max_life = max_life;
+        this.amount = amount;
     }
 
     public String getId() {
@@ -67,9 +70,27 @@ public class Schedule {
         this.date = date;
     }
 
+    public String getMax_life() {
+        return max_life;
+    }
+
+    public void setMax_life(String max_life) {
+        this.max_life = max_life;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
+    }
+
     @Override
     public String toString() {
-        return "Schedule{" + "id=" + id + ", title=" + title + ", start_time=" + start_time + ", end_time=" + end_time + ", date=" + date + '}';
+        return "Schedule{" + "id=" + id + ", title=" + title + ", start_time=" + start_time + ", end_time=" + end_time + ", date=" + date + ", max_life=" + max_life + ", amount=" + amount + '}';
     }
+
+    
       
 }

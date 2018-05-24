@@ -5,7 +5,26 @@
  */
 package forms;
 
+import com.google.api.core.ApiFuture;
+import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.DocumentSnapshot;
+import com.google.cloud.firestore.EventListener;
+import com.google.cloud.firestore.Firestore;
+import com.google.cloud.firestore.FirestoreException;
+import com.google.cloud.firestore.QueryDocumentSnapshot;
+import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.WriteResult;
+import com.google.firebase.cloud.FirestoreClient;
+import faisal.com.bdcashquiz.model.userManage;
+import java.awt.Font;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import static javax.swing.text.html.HTML.Tag.FONT;
 import model.Questions;
 
 /**
@@ -14,20 +33,44 @@ import model.Questions;
  */
 public class QuestionDetails extends javax.swing.JFrame {
 private List questionList;
+ List modelList;
     /**
      * Creates new form QuestionDetails
      */
+public QuestionDetails(List questionList)
+{
+    this.questionList=questionList;
+     initComponents();
+      modelList=new ArrayList<Questions>();
+     setDataList();
+    userLiveUpdate();
+}
     public QuestionDetails() {
         initComponents();
      setDataList();
+     
     }
 public void setDataList()
 {
     list1.removeAll();
-    for(Object question:questionList)
+    modelList.clear();
+    System.out.println(questionList.size());
+    List<QueryDocumentSnapshot> doclist=questionList;
+   // modelList=new ArrayList<Questions>();
+    for(QueryDocumentSnapshot qr:doclist)
     {
-        Questions q=(Questions) question;
+        
+        Questions q=qr.toObject(Questions.class);
+        q.setId(qr.getId());
         list1.add(q.getQ());
+        try{
+              modelList.add(q);
+              System.out.println(modelList.size());
+        }catch(Exception e)
+        {
+            System.out.println("Exception: "+e);
+        }
+      
     }
 }
     public List getQuestionList() {
@@ -36,6 +79,7 @@ public void setDataList()
 
     public void setQuestionList(List questionList) {
         this.questionList = questionList;
+         //System.out.println(questionList.size());
     }
 
     /**
@@ -49,23 +93,40 @@ public void setDataList()
 
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        op3 = new javax.swing.JTextField();
+        op4 = new javax.swing.JTextField();
+        op2 = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        op1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        opAns = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
+        questionTitle = new javax.swing.JLabel();
+        questionId = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        usernumber = new javax.swing.JLabel();
+        a = new javax.swing.JLabel();
+        b = new javax.swing.JLabel();
+        c = new javax.swing.JLabel();
+        d = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         list1 = new java.awt.List();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
+        totalAmount = new javax.swing.JTextField();
+        currectAns = new javax.swing.JTextField();
+        liveBtn = new javax.swing.JButton();
+        videoId = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -73,15 +134,15 @@ public void setDataList()
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Question "));
 
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+        op3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
+                op3ActionPerformed(evt);
             }
         });
 
         jLabel5.setText("Option 4");
 
-        jLabel6.setText("Title");
+        jLabel6.setText("Question");
 
         jLabel4.setText("Option 2");
 
@@ -89,13 +150,42 @@ public void setDataList()
 
         jLabel2.setText("Option 1");
 
-        jButton1.setText("UPDATE");
+        op1.setFont(new java.awt.Font("Vrinda", 0, 11)); // NOI18N
+
+        jButton1.setText("THROUGN QUESTION");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel7.setText("Correct Ans");
 
-        jButton2.setText("DELETE");
+        jButton2.setText("WITHDRAW QUESTION");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jLabel8.setText("Id");
+
+        questionTitle.setFont(new java.awt.Font("Vrinda", 0, 11)); // NOI18N
+        questionTitle.setText("title");
+
+        questionId.setText("id");
+
+        jLabel10.setText("User Join");
+
+        usernumber.setText("0");
+
+        a.setText("0");
+
+        b.setText("0");
+
+        c.setText("0");
+
+        d.setText("0");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -111,7 +201,7 @@ public void setDataList()
                                 .addComponent(jButton1)
                                 .addGap(18, 18, 18)
                                 .addComponent(jButton2)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -123,54 +213,83 @@ public void setDataList()
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel7)
-                                    .addComponent(jLabel5))
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel8))
                                 .addGap(28, 28, 28)))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(1, 1, 1)
-                                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jTextField5)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel9)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap())
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(questionTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(questionId)
+                                        .addGap(103, 103, 103)
+                                        .addComponent(jLabel10)))
+                                .addGap(18, 18, 18)
+                                .addComponent(usernumber, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(op2)
+                                        .addComponent(op1)
+                                        .addComponent(op3, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(opAns, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(op4, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(100, 100, 100)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(a, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(b, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(c, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(d, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel9))
-                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(questionTitle)
+                            .addComponent(usernumber))
+                        .addGap(18, 18, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel9)
+                            .addComponent(questionId)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(27, 27, 27)
                         .addComponent(jLabel4)
                         .addGap(24, 24, 24)
-                        .addComponent(jLabel3)
-                        .addGap(79, 79, 79))
+                        .addComponent(jLabel3))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(op1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(a))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))
+                            .addComponent(op2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(b))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(op3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(c))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(op4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5)
+                            .addComponent(d))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(opAns, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel7))))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -181,22 +300,90 @@ public void setDataList()
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("List "));
 
+        list1.setFont(new java.awt.Font("Vrinda", 0, 12)); // NOI18N
+        list1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                list1MouseClicked(evt);
+            }
+        });
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Distribution Panel"));
+
+        jLabel13.setText("Total Amount");
+
+        jLabel12.setText("Currect Ans");
+
+        jButton3.setText("Distribute");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel12)
+                    .addComponent(jLabel13))
+                .addGap(26, 26, 26)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(currectAns)
+                    .addComponent(totalAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(currectAns, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel12))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(totalAmount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel13))
+                .addGap(18, 18, 18)
+                .addComponent(jButton3)
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(list1, javax.swing.GroupLayout.DEFAULT_SIZE, 561, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(list1, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(69, 69, 69)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(239, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(list1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(list1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(57, 57, 57)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        liveBtn.setText("GO LIVE");
+        liveBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                liveBtnActionPerformed(evt);
+            }
+        });
+
+        jLabel11.setText("VIDEO ID");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -207,8 +394,15 @@ public void setDataList()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel11)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(videoId)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(liveBtn)))
+                        .addGap(18, 18, 18)
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -220,18 +414,286 @@ public void setDataList()
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(liveBtn)
+                            .addComponent(videoId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel11))))
                 .addGap(0, 29, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+    private void op3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_op3ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
+    }//GEN-LAST:event_op3ActionPerformed
+public Questions questions;
+    private void list1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_list1MouseClicked
+        // TODO add your handling code here:
+     Font banglaFont=new Font("SolimanLipi",Font.PLAIN,16);
+        list1.setFont(banglaFont);
+        int position=list1.getSelectedIndex();
+       
+     Questions q= (Questions) modelList.get(position);
+      this.questions=q;
+     op1.setText(q.getO1());
+     op2.setText(q.getO2());
+     op3.setText(q.getO3());
+     op4.setText(q.getO4());
+     opAns.setText(q.getAns());
+     questionTitle.setText(q.getQ());
+     questionId.setText(q.getId());
+//      System.out.println("Option 1: "+q.getQ1());
+     //System.out.println(position+"  Model Size: "+modelList.size());
+    }//GEN-LAST:event_list1MouseClicked
 
-    /**
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    try {
+        // TODO add your handling code here:
+        Map<String,String> datas=new HashMap<String,String>();
+        datas.put("title",questions.getTitle());
+        datas.put("o1",questions.getO1());
+        datas.put("o2",questions.getO2());
+        datas.put("o3",questions.getO3());
+        datas.put("o4",questions.getO4());
+        datas.put("q",questions.getQ());
+        datas.put("ans",questions.getAns());
+        datas.put("id",questions.getId());
+        
+        Firestore db=FirestoreClient.getFirestore();
+        // Add a new document (asynchronously) in collection "cities" with id "LA"
+        ApiFuture<WriteResult> future = db.collection("livequestion").document(questions.getId()).set(datas);
+        
+// ...
+// future.get() blocks on response
+System.out.println("Update time : " + future.get().getUpdateTime());
+//Map<String,String> qmap=new HashMap<>();
+//        db.collection("livequestion").document("a").set(qmap);
+//         
+//         db.collection("livequestion").document("b").set(qmap);
+//          
+//         db.collection("livequestion").document("c").set(qmap);
+    } catch (InterruptedException ex) {
+        Logger.getLogger(QuestionDetails.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (ExecutionException ex) {
+        Logger.getLogger(QuestionDetails.class.getName()).log(Level.SEVERE, null, ex);
+    }
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+ public void deleteDocuments(String collection,List<QueryDocumentSnapshot> documents)
+    {
+        // asynchronously delete a document
+        for(QueryDocumentSnapshot doc:documents)
+        {
+           String docId=""+doc.getId();
+           Firestore db=FirestoreClient.getFirestore();
+           ApiFuture<WriteResult> writeResult = db.collection(collection).document(docId).delete();
+            try {
+                // ...
+                //System.out.println("Update time : " + writeResult.get().getUpdateTime());
+            } catch (Exception ex) {
+                Logger.getLogger(FireBase.class.getName()).log(Level.SEVERE, null, ex);
+            } 
+        }
+
+    }
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    try {
+        // TODO add your handling code here:
+        Firestore db=FirestoreClient.getFirestore();
+        // Add a new document (asynchronously) in collection "cities" with id "LA"
+     
+        // db.collection("a").
+      //  System.out.println("Update time : " + future.get().getUpdateTime());
+      //asynchronously retrieve multiple documents
+      try{
+          
+ApiFuture<QuerySnapshot> futurea = db.collection("a").get();
+// future.get() blocks on response
+List<QueryDocumentSnapshot> documents = futurea.get().getDocuments();
+        deleteDocuments("a", documents);}catch(Exception e)
+        {
+            
+        }
+      try{
+        ApiFuture<QuerySnapshot> futureb = db.collection("b").get();
+// future.get() blocks on response
+List<QueryDocumentSnapshot> documentsb = futureb.get().getDocuments();
+        deleteDocuments("b", documentsb);
+      }catch(Exception e)
+      {
+          
+      }
+      try{
+        ApiFuture<QuerySnapshot> futurec = db.collection("c").get();
+// future.get() blocks on response
+List<QueryDocumentSnapshot> documentsc = futurec.get().getDocuments();
+        deleteDocuments("c", documentsc);
+      }catch(Exception e)
+      {
+          
+      }
+      try{
+        ApiFuture<QuerySnapshot> futurec = db.collection("d").get();
+// future.get() blocks on response
+List<QueryDocumentSnapshot> documentsd = futurec.get().getDocuments();
+        deleteDocuments("d", documentsd);
+        insertLiveAttend("liveAttend","ansb",""+b.getText().toString());
+            insertLiveAttend("liveAttend","ansa",""+a.getText().toString());
+             insertLiveAttend("liveAttend","ansc",""+c.getText().toString());
+      }catch(Exception e)
+      {
+          
+      }
+           ApiFuture<WriteResult> future = db.collection("livequestion").document(questions.getId()).delete();
+           future.get();
+            
+    } catch (Exception ex) {
+        Logger.getLogger(QuestionDetails.class.getName()).log(Level.SEVERE, null, ex);
+    } 
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void liveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_liveBtnActionPerformed
+        // TODO add your handling code here:
+        String btnString=liveBtn.getText().toLowerCase();
+        //if(btnString.equeals)
+        if(btnString.equals("go live")&&(!videoId.getText().equals(""))){
+        Map<String,String> map=new HashMap<String,String>();
+        map.put("video_id", videoId.getText());
+        map.put("live","true");
+        Firestore db=FirestoreClient.getFirestore();
+        db.collection("liveMonitor").document("101").set(map);
+        liveBtn.setText("END LIVE");
+        }
+        else
+        {
+           Map<String,String> map=new HashMap<String,String>();
+        map.put("video_id", videoId.getText());
+        map.put("live","false");
+        Firestore db=FirestoreClient.getFirestore();
+        db.collection("liveMonitor").document("101").set(map);
+        liveBtn.setText("GO LIVE");
+        }
+       
+    }//GEN-LAST:event_liveBtnActionPerformed
+private List<String> userList;
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    try {
+        // TODO add your handling code here:
+        userList=new ArrayList<>();
+        Firestore db=FirestoreClient.getFirestore();
+        ApiFuture<QuerySnapshot> future =
+                db.collection(currectAns.getText()).get();
+// future.get() blocks on response
+List<QueryDocumentSnapshot> documents = future.get().getDocuments();
+for (DocumentSnapshot document : documents) {
+    
+    userList.add(document.getId());
+    
+} 
+        distributeMoney(userList, Integer.parseInt(totalAmount.getText()));
+    } catch (InterruptedException ex) {
+        Logger.getLogger(QuestionDetails.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (ExecutionException ex) {
+        Logger.getLogger(QuestionDetails.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    }//GEN-LAST:event_jButton3ActionPerformed
+public void distributeMoney(List<String> list,int totalMoney)
+{
+    Firestore db=FirestoreClient.getFirestore();
+    double balance=totalMoney/list.size();
+    for(String uid:list)
+    {
+       DocumentReference doc=db.collection("userManage").document(uid);
+        ApiFuture<DocumentSnapshot> future = doc.get();
+        try {
+            DocumentSnapshot document = future.get();
+            userManage manage=document.toObject(userManage.class);
+            insertMoney(db,uid,manage,balance);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(QuestionDetails.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ExecutionException ex) {
+            Logger.getLogger(QuestionDetails.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+}
+public void insertMoney(Firestore db, String uid,userManage manage,double balance)
+{
+    Map<String,String> map=new HashMap<>();
+    map.put("balance",""+((Double.parseDouble(manage.getBalance()))+balance));
+    map.put("email",manage.getEmail());
+    map.put("gameLife",manage.getGameLife());
+    map.put("name",manage.getName());
+    map.put("phoneNumber",manage.getPhoneNumber());
+    map.put("photoUrl",manage.getPhotoUrl());
+    map.put("totalLife",manage.getTotalLife());
+    db.collection("userManage").document(uid).set(map);
+    
+}
+         public void userLiveUpdate(){
+ 
+    
+   
+   Firestore db;
+   db=FirestoreClient.getFirestore();
+   db.collection("liveuser")
+           .addSnapshotListener(new EventListener<QuerySnapshot>() {
+       @Override
+       public void onEvent(QuerySnapshot t, FirestoreException fe) {
+          // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        usernumber.setText(""+(t.getDocuments().size()-1)) ;
+       insertLiveAttend("liveAttend","usernumber",""+(t.getDocuments().size()-1));
+       }
+   });
+   db.collection("a")
+           .addSnapshotListener(new EventListener<QuerySnapshot>() {
+       @Override
+       public void onEvent(QuerySnapshot t, FirestoreException fe) {
+          // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        a.setText(""+(t.getDocuments().size())) ;
+         insertLiveAttend("liveAttend","ansa",""+a.getText().toString());
+       }
+   });
+   db.collection("b")
+           .addSnapshotListener(new EventListener<QuerySnapshot>() {
+       @Override
+       public void onEvent(QuerySnapshot t, FirestoreException fe) {
+          // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        b.setText(""+(t.getDocuments().size())) ;
+        insertLiveAttend("liveAttend","ansb",""+b.getText().toString());
+       }
+   });
+   db.collection("c")
+           .addSnapshotListener(new EventListener<QuerySnapshot>() {
+       @Override
+       public void onEvent(QuerySnapshot t, FirestoreException fe) {
+          // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        c.setText(""+(t.getDocuments().size())) ;
+        insertLiveAttend("liveAttend","ansc",""+c.getText().toString());
+       }
+   });
+     db.collection("d")
+           .addSnapshotListener(new EventListener<QuerySnapshot>() {
+       @Override
+       public void onEvent(QuerySnapshot t, FirestoreException fe) {
+          // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        d.setText(""+(t.getDocuments().size())) ;
+       }
+   });
+
+ 
+}
+ public void insertLiveAttend(String collection,String document,String number)
+ {
+     Map<String,String> hMap=new HashMap<String,String>();
+     hMap.put("number",number);
+     Firestore db=FirestoreClient.getFirestore();
+     db.collection(collection).document(document).set(hMap);
+ }
+         /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -267,9 +729,19 @@ public void setDataList()
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel a;
+    private javax.swing.JLabel b;
+    private javax.swing.JLabel c;
+    private javax.swing.JTextField currectAns;
+    private javax.swing.JLabel d;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -280,11 +752,18 @@ public void setDataList()
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
+    private javax.swing.JPanel jPanel3;
     private java.awt.List list1;
+    private javax.swing.JButton liveBtn;
+    private javax.swing.JTextField op1;
+    private javax.swing.JTextField op2;
+    private javax.swing.JTextField op3;
+    private javax.swing.JTextField op4;
+    private javax.swing.JTextField opAns;
+    private javax.swing.JLabel questionId;
+    private javax.swing.JLabel questionTitle;
+    private javax.swing.JTextField totalAmount;
+    private javax.swing.JLabel usernumber;
+    private javax.swing.JTextField videoId;
     // End of variables declaration//GEN-END:variables
 }
